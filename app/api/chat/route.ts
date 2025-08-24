@@ -1,5 +1,6 @@
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
 import { initializeOTEL } from "langsmith/experimental/otel/setup";
+import { siteConfig } from "@/lib/config";
 import { getModel } from "./get-model";
 import { getProviderOptions } from "./providerOptions";
 
@@ -14,8 +15,7 @@ export async function POST(req: Request) {
     const result = streamText({
       model: getModel(model),
       messages: convertToModelMessages(messages),
-      system:
-        "You are a friendly assistant! Keep your responses concise and helpful.",
+      system: siteConfig.systemPrompt,
       providerOptions: getProviderOptions(model),
       onError: (error) => {
         console.dir(error, { depth: null });
