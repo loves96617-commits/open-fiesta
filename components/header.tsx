@@ -1,5 +1,6 @@
 import { GitHubLink } from "./github-link";
 import { ModelSelector } from "./model-selection/model-selector";
+import { Profile } from "./profile";
 import { ThemeSwitcher } from "./theme-switcher";
 
 export const Header = () => {
@@ -9,6 +10,7 @@ export const Header = () => {
         <ModelSelector />
         <ThemeSwitcher />
         <GitHubLink />
+        <Profile />
       </div>
     </header>
   );
