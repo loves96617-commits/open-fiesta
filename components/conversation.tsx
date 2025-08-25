@@ -18,7 +18,7 @@ type Props = {
 export const Conversation = (props: Props) => {
   const { model } = props;
 
-  const { messages, status } = useConversation(model.id);
+  const { messages, status, error } = useConversation(model.id);
 
   return (
     <div className="flex flex-1 h-full w-full flex-col overflow-hidden">
@@ -47,6 +47,11 @@ export const Conversation = (props: Props) => {
             );
           })}
           {status === "submitted" && <Loading provider={model.provider} />}
+          {error && (
+            <div className="text-red-500">
+              Failed to generate response due to {error.message}
+            </div>
+          )}
         </ChatContainerContent>
       </ChatContainerRoot>
     </div>

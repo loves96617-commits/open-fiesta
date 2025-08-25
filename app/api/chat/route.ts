@@ -8,43 +8,33 @@ export const maxDuration = 60;
 initializeOTEL();
 
 export async function POST(req: Request) {
-  try {
-    const { messages, model }: { messages: UIMessage[]; model: string } =
-      await req.json();
+  const { messages, model }: { messages: UIMessage[]; model: string } =
+    await req.json();
 
-    const result = streamText({
-      model: getModel(model),
-      messages: [
-        {
-          role: "assistant",
-          content: siteConfig.systemPrompt,
-        },
-        ...convertToModelMessages(messages),
-      ],
-      providerOptions: getProviderOptions(model),
-      onError: (error) => {
-        console.dir(error, { depth: null });
-      },
-
-      experimental_telemetry: {
-        isEnabled: true,
-        metadata: {
-          ls_run_name: `open-fiesta`,
-          environment: process.env.NODE_ENV,
-        },
-      },
-    });
-
-    return result.toUIMessageStreamResponse({
-      sendReasoning: true,
-    });
-  } catch (error) {
-    console.error(error);
-    return new Response(
-      error instanceof Error ? error.message : "Failed to generate response",
+  const result = streamText({
+    model: getModel(model),
+    messages: [
       {
-        status: 500,
+        role: "assistant",
+        content: siteConfig.systemPrompt,
       },
-    );
-  }
+      ...convertToModelMessages(messages),
+    ],
+    providerOptions: getProviderOptions(model),
+    onError: (error) => {
+      console.dir(error, { depth: null });
+    },
+
+    experimental_telemetry: {
+      isEnabled: true,
+      metadata: {
+        ls_run_name: `open-fiesta`,
+        environment: process.env.NODE_ENV,
+      },
+    },
+  });
+
+  return result.toUIMessageStreamResponse({
+    sendReasoning: true,
+  });
 }
