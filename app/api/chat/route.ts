@@ -14,8 +14,13 @@ export async function POST(req: Request) {
 
     const result = streamText({
       model: getModel(model),
-      messages: convertToModelMessages(messages),
-      system: siteConfig.systemPrompt,
+      messages: [
+        {
+          role: "assistant",
+          content: siteConfig.systemPrompt,
+        },
+        ...convertToModelMessages(messages),
+      ],
       providerOptions: getProviderOptions(model),
       onError: (error) => {
         console.dir(error, { depth: null });
