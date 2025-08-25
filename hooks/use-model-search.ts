@@ -25,9 +25,6 @@ export const useModelSearch = (models: Model[]) => {
 
   const groupedModels = filteredModels.reduce(
     (acc, model) => {
-      if (model.id === "claude-opus-4-20250514") {
-        return acc;
-      }
       const providerName = model.provider;
       if (!acc[providerName]) {
         acc[providerName] = [];
@@ -56,7 +53,20 @@ export const useModelSearch = (models: Model[]) => {
     return providerA.localeCompare(providerB);
   };
 
-  const sortedProviders = Object.entries(groupedModels).sort(sortProviders);
+  const sortedProviders = Object.entries(groupedModels)
+    .sort(sortProviders)
+    .map(
+      ([provider, models]) =>
+        [
+          provider,
+          models.sort((a, b) => {
+            if (a.isFree !== b.isFree) {
+              return a.isFree ? -1 : 1;
+            }
+            return a.name.localeCompare(b.name);
+          }),
+        ] as [string, Model[]],
+    );
 
   const handleClearSearch = () => {
     setSearchQuery("");
