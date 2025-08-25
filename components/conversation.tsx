@@ -8,7 +8,8 @@ import {
 import { UserMessage } from "@/components/user-message";
 import { useConversation } from "@/hooks/use-conversation";
 import type { Model } from "@/lib/types";
-import { Loading } from "./loading";
+import { ErrorMessage } from "./error-message";
+import { LoadingMessage } from "./loading-message";
 import { ModelLogo } from "./model-selection/model-logo";
 
 type Props = {
@@ -46,11 +47,14 @@ export const Conversation = (props: Props) => {
               <UserMessage key={message.id} message={message} />
             );
           })}
-          {status === "submitted" && <Loading provider={model.provider} />}
+          {status === "submitted" && (
+            <LoadingMessage provider={model.provider} />
+          )}
           {error && (
-            <div className="text-red-500">
-              Failed to generate response due to {error.message}
-            </div>
+            <ErrorMessage
+              provider={model.provider}
+              errorMessage={error.message}
+            />
           )}
         </ChatContainerContent>
       </ChatContainerRoot>
