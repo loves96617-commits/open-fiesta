@@ -15,6 +15,10 @@ export async function POST(req: Request) {
   }: { messages: UIMessage[]; model: string; userId: string } =
     await req.json();
 
+  if (model.startsWith("claude-opus")) {
+    return new Response("Bro! I am going bankrupt🥺", { status: 400 });
+  }
+
   const result = streamText({
     model: getModel(model),
     messages: [
