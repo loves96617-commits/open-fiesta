@@ -6,7 +6,7 @@ import {
   ChatContainerRoot,
 } from "@/components/prompt-kit/chat-container";
 import { UserMessage } from "@/components/user-message";
-import { useConversation } from "@/hooks/useConversation";
+import { useConversation } from "@/hooks/use-conversation";
 import type { Model } from "@/lib/types";
 import { Loading } from "./loading";
 import { ModelLogo } from "./model-selection/model-logo";

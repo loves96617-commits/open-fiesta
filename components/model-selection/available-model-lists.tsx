@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { fetchModels } from "@/actions/fetch-models";
-import { useModelSearch } from "@/hooks/useModelSearch";
+import { useModelSearch } from "@/hooks/use-model-search";
 import type { Model } from "@/lib/types";
 import { EmptyState } from "./empty-state";
 import { ModelListSkeleton } from "./model-list-skeleton";
