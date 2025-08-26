@@ -21,6 +21,12 @@ export const metadata: Metadata = {
   title: siteConfig.name,
   description: siteConfig.description,
   keywords: siteConfig.keywords,
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
 };
 
 export default function RootLayout({
