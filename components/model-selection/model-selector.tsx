@@ -1,5 +1,3 @@
-import { Settings2Icon } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -13,17 +11,16 @@ import { useDialogState } from "@/stores/use-dialog-state";
 import { AvailableModelsList } from "./available-model-lists";
 import { SelectedModel } from "./selected-model";
 
-export const ModelSelector = () => {
+type Props = {
+  trigger: React.ReactNode;
+};
+export const ModelSelector = (props: Props) => {
+  const { trigger } = props;
   const { isModelSelectorOpen, setModelSelectorOpen } = useDialogState();
 
   return (
     <Dialog open={isModelSelectorOpen} onOpenChange={setModelSelectorOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
-          <Settings2Icon className="size-4" />
-          <span className="hidden sm:block">Manage Models</span>
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="sm:max-w-6xl h-[90dvh] flex flex-col">
         <DialogHeader>
           <DialogTitle>Pick Your Model Squad</DialogTitle>
