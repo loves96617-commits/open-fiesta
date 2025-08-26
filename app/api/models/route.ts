@@ -121,7 +121,6 @@ export const GET = async () => {
       ...(aimlModels.status === "fulfilled" ? aimlModels.value : []),
       ...(vercelModels.status === "fulfilled" ? vercelModels.value : []),
     ];
-    console.log("Total models:", allModels.length);
 
     return NextResponse.json({ models: allModels });
   } catch (error) {
