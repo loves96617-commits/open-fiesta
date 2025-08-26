@@ -28,9 +28,19 @@ export const prepareModelAndMessages = (
   let modelWithApiKey: LanguageModelV2;
   let system: string | undefined = siteConfig.systemPrompt;
   let messages = modelMessages;
+  let headers: Record<string, string> | undefined;
   if (gateway === "openrouter") {
     const customOpenRouter = createOpenRouter({ apiKey });
-    modelWithApiKey = customOpenRouter.chat(modelId);
+    modelWithApiKey = customOpenRouter.chat(modelId, {
+      reasoning: {
+        enabled: true,
+        effort: "low",
+      },
+    });
+    headers = {
+      "HTTP-Referer": "https://open-fiesta.com/",
+      "X-Title": "Open Fiesta",
+    };
   } else if (gateway === "vercel") {
     const customAiGateway = createGateway({ apiKey });
     modelWithApiKey = customAiGateway(modelId);
@@ -53,5 +63,6 @@ export const prepareModelAndMessages = (
     }),
     messages,
     system,
+    headers,
   };
 };
