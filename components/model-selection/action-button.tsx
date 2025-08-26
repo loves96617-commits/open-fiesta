@@ -25,6 +25,11 @@ export const ActionButton = ({
   const backgroundColor = type === "add" ? "#16a34a" : "#dc2626";
   const buttonSize = size === "sm" ? "w-5 h-5" : "w-6 h-6";
 
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onClick();
+  };
+
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -32,7 +37,7 @@ export const ActionButton = ({
           variant="outline"
           size="icon"
           className={`${buttonSize} rounded-full p-0 flex items-center justify-center border-none`}
-          onClick={onClick}
+          onClick={handleClick}
           disabled={disabled}
           style={{
             backgroundColor,

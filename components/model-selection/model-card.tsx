@@ -124,7 +124,10 @@ export const ModelCard = ({ model }: Props) => {
                     border: "none",
                     pointerEvents: "auto",
                   }}
-                  onClick={openConfigDialogFromModelSelector}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openConfigDialogFromModelSelector();
+                  }}
                 >
                   <Key className="size-3" strokeWidth={3.5} />
                 </Button>
