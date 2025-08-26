@@ -1,8 +1,12 @@
-import { gateway as aiGateway } from "@ai-sdk/gateway";
 import millify from "millify";
 import { NextResponse } from "next/server";
 import { freeModels } from "@/lib/models";
-import type { AIMLModel, Model, OpenRouterModel } from "@/lib/types";
+import type {
+  AIMLModel,
+  Model,
+  OpenRouterModel,
+  VercelModel,
+} from "@/lib/types";
 
 const formatPrice = (price: string) => {
   if (price === "-1") return "-";
@@ -73,20 +77,23 @@ const fetchAIMLModels = async (): Promise<Model[]> => {
 
 const fetchVercelModels = async (): Promise<Model[]> => {
   try {
-    const { models } = await aiGateway.getAvailableModels();
+    const response = await fetch("https://ai-gateway.vercel.sh/v1/models", {
+      next: { revalidate: 3600 },
+    });
+    const data: VercelModel[] = (await response.json()).data;
 
-    return models.reduce<Model[]>((acc, model) => {
-      if (model.modelType === "language") {
+    return data.reduce<Model[]>((acc, model) => {
+      if (model.type === "language") {
         acc.push({
           id: `vercel:${model.id}`,
           name: model.name,
-          provider: model.id.split("/")[0].trim(),
+          provider: model.owned_by,
           gateway: "vercel",
           pricing: {
-            input: formatPrice(model.pricing?.input || "-1"),
-            output: formatPrice(model.pricing?.output || "-1"),
+            input: formatPrice(model.pricing.input || "-1"),
+            output: formatPrice(model.pricing.output || "-1"),
           },
-          context: "-",
+          context: millify(model.context_window),
           isFree: freeModels.has(model.id),
         });
       }

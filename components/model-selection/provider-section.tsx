@@ -13,7 +13,8 @@ export const ProviderSection = ({
   return (
     <div className="space-y-3">
       <h3 className="text-md font-semibold">
-        {providerName} ({models.length})
+        {providerName.charAt(0).toUpperCase() + providerName.slice(1)} (
+        {models.length})
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {models.map((model) => (

@@ -32,26 +32,15 @@ export interface Info {
 export interface OpenRouterModel {
   id: string;
   canonical_slug: string;
-  hugging_face_id: string;
   name: string;
   created: number;
   description: string;
   context_length: number;
-  architecture: Architecture;
-  pricing: Pricing;
-  top_provider: TopProvider;
+  pricing: OpenRouterPricing;
   supported_parameters: string[];
 }
 
-export interface Architecture {
-  modality: string;
-  input_modalities: string[];
-  output_modalities: string[];
-  tokenizer: string;
-  instruct_type: string;
-}
-
-export interface Pricing {
+export interface OpenRouterPricing {
   prompt: string;
   completion: string;
   request: string;
@@ -60,8 +49,20 @@ export interface Pricing {
   internal_reasoning: string;
 }
 
-export interface TopProvider {
-  context_length: number;
-  max_completion_tokens: number | null;
-  is_moderated: boolean;
+export interface VercelModel {
+  id: string;
+  object: string;
+  created: number;
+  owned_by: string;
+  name: string;
+  description: string;
+  context_window: number;
+  max_tokens: number;
+  type: string;
+  pricing: VercelPricing;
+}
+
+export interface VercelPricing {
+  input: string;
+  output: string;
 }
