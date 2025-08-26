@@ -1,4 +1,4 @@
-import { Settings } from "lucide-react";
+import { Settings2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,24 +9,27 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { siteConfig } from "@/lib/config";
+import { useDialogState } from "@/stores/use-dialog-state";
 import { AvailableModelsList } from "./available-model-lists";
 import { SelectedModel } from "./selected-model";
 
 export const ModelSelector = () => {
+  const { isModelSelectorOpen, setModelSelectorOpen } = useDialogState();
+
   return (
-    <Dialog>
+    <Dialog open={isModelSelectorOpen} onOpenChange={setModelSelectorOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
-          <Settings className="size-4" />
-          Manage Models
+          <Settings2Icon className="size-4" />
+          <span className="hidden sm:block">Manage Models</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-6xl h-[90dvh] flex flex-col">
         <DialogHeader>
-          <DialogTitle>Select Models</DialogTitle>
+          <DialogTitle>Pick Your Model Squad</DialogTitle>
           <DialogDescription>
-            Select between 1 to {siteConfig.maxModels} models for your
-            conversation.
+            Choose between 1 and {siteConfig.maxModels} models to vibe with in
+            your convo.
           </DialogDescription>
         </DialogHeader>
         <SelectedModel />

@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/tooltip";
 import { siteConfig } from "@/lib/config";
 import type { Model } from "@/lib/types";
+import { useApiKey } from "@/stores/use-api-key";
+import { useDialogState } from "@/stores/use-dialog-state";
 import { useModels } from "@/stores/use-models";
 import { ActionButton } from "./action-button";
 import { ModelLogo } from "./model-logo";
@@ -22,6 +24,10 @@ export const ModelCard = ({ model }: Props) => {
   const addSelectedModel = useModels((state) => state.addSelectedModel);
   const selectedModels = useModels((state) => state.selectedModels);
   const removeSelectedModel = useModels((state) => state.removeSelectedModel);
+  const { openConfigDialogFromModelSelector } = useDialogState();
+  const aimlApiKey = useApiKey((state) => state.aimlApiKey);
+  const openRouterApiKey = useApiKey((state) => state.openRouterApiKey);
+  const vercelApiKey = useApiKey((state) => state.vercelApiKey);
 
   useEffect(() => {
     const checkTruncation = () => {
@@ -46,6 +52,20 @@ export const ModelCard = ({ model }: Props) => {
   };
 
   const isSelected = selectedModels.some((m) => m.id === model.id);
+
+  const shouldEnableModel = (model: Model) => {
+    if (model.isFree) return true;
+    if (model.gateway === "aimlapi") {
+      return aimlApiKey !== "";
+    }
+    if (model.gateway === "openrouter") {
+      return openRouterApiKey !== "";
+    }
+    if (model.gateway === "vercel") {
+      return vercelApiKey !== "";
+    }
+    return false;
+  };
 
   return (
     <div
@@ -81,7 +101,7 @@ export const ModelCard = ({ model }: Props) => {
           </div>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
-          {model.isFree ? (
+          {shouldEnableModel(model) ? (
             <ActionButton
               type={isSelected ? "remove" : "add"}
               size="md"
@@ -97,20 +117,20 @@ export const ModelCard = ({ model }: Props) => {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="w-6 h-6 rounded-full p-0 flex items-center justify-center border-none cursor-default"
+                  className="w-6 h-6 rounded-full p-0 flex items-center justify-center border-none cursor-pointer"
                   style={{
                     backgroundColor: "#6b7280",
                     color: "white",
                     border: "none",
                     pointerEvents: "auto",
                   }}
-                  onClick={(e) => e.preventDefault()}
+                  onClick={openConfigDialogFromModelSelector}
                 >
                   <Key className="size-3" strokeWidth={3.5} />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>BYOK(WIP)</p>
+                <p>BYOK</p>
               </TooltipContent>
             </Tooltip>
           )}
@@ -120,7 +140,9 @@ export const ModelCard = ({ model }: Props) => {
         <div className="space-y-3">
           <div className="flex items-start justify-between">
             <div className="font-medium text-foreground">ID</div>
-            <div className="text-muted-foreground text-right">{model.id}</div>
+            <div className="text-muted-foreground text-right">
+              {model.id.split(":")[1]}
+            </div>
           </div>
           <div className="flex items-start justify-between">
             <div className="font-medium text-foreground">Input Pricing</div>
