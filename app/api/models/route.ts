@@ -18,7 +18,7 @@ const formatPrice = (price: string) => {
 
 const fetchOpenRouterModels = async (): Promise<Model[]> => {
   try {
-    const response = await fetch("https://openrouter.ai/api/v1/models", {
+    const response = await fetch("https://api.a4f.co/v1", {
       next: { revalidate: 3600 },
     });
     const data: OpenRouterModel[] = (await response.json()).data;
